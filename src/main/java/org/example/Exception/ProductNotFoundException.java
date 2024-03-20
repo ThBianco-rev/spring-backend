@@ -1,6 +1,6 @@
-package org.example.Exception;
+package org.example.exception;
 
-public class ProductNotFoundException extends Exception{
+public class ProductNotFoundException extends Exception {
     public ProductNotFoundException(String message){
         super(message);
     }
