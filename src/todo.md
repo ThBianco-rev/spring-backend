@@ -1,25 +1,26 @@
 1. [ ] # Controllers
 2. [ ] Product Controller
-3. [ ] Seller Controller
+3. [x] Seller Controller
 
-4. [ ] # Entities
-5. [ ] Product Entity
+4. [x] # Entities
+5. [x] Product Entity
+6. [x] Seller Entity
 
-6. [ ] # Exceptions
+7. [ ] # Exceptions
 
-7. [ ] # Repositories
-8. [ ] Product Repository
-9. [ ] Seller Repository
+8. [x] # Repositories
+9. [x] Product Repository
+10. [x] Seller Repository
 
-10. [ ] # Services
-11. [ ] Product Service
-12. [ ] Seller Service
+11. [ ] # Services
+12. [ ] Product Service
+13. [x] Seller Service
 
-13. [ ] # Endpoints
-14. [ ] GET all Sellers
-15. [ ] POST a Seller
-16. [ ] GET all Products
-17. [ ] GET a Product by ID
-18. [ ] POST a Product
-19. [ ] PUT an update to a Product
-20. [ ] DELETE a Product
+14. [ ] # Endpoints
+15. [x] GET all Sellers
+16. [x] POST a Seller
+17. [L] GET all Products
+18. [L] GET a Product by ID
+19. [T] POST a Product
+20. [T] PUT an update to a Product
+21. [T] DELETE a Product

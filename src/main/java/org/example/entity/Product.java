@@ -1,5 +1,7 @@
 package org.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,10 +13,14 @@ import lombok.*;
 @ToString
 public class Product {
 
-    // TODO: Set up spring annotations
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
     private double price;
-    private int seller;
 
+    @ManyToOne
+    @JsonIgnore
+    @JsonIgnoreProperties("products")
+    private Seller seller;
 }
