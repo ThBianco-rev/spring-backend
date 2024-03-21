@@ -55,7 +55,6 @@ public class ProductController {
             Product p = productService.getById(id);
             return new ResponseEntity<>(p, HttpStatus.OK);
         }catch (ProductNotFoundException e){
-            //TODO: Add logging
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
@@ -66,8 +65,6 @@ public class ProductController {
             Product product = productService.saveProduct(id, p);
             return new ResponseEntity<>(product, HttpStatus.CREATED);
         }catch (SellerNotFoundException | ProductDataException e){
-            //TODO: Replace with logging
-            System.out.println(e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
@@ -78,8 +75,6 @@ public class ProductController {
             Product product = productService.updateProduct(id, p);
             return new ResponseEntity<>(product, HttpStatus.OK);
         }catch (Exception e){
-            //TODO: Replace with logging
-            System.out.println(e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -90,8 +85,6 @@ public class ProductController {
             Product product = productService.deleteProduct(id);
             return new ResponseEntity<>(product, HttpStatus.OK);
         } catch (ProductNotFoundException e) {
-            //TODO: Replace with logging
-            System.out.println(e);
             // Even if product is not found, return 200 status - this is convention
             return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
         }

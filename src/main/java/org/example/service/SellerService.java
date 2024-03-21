@@ -21,8 +21,11 @@ public class SellerService {
     }
 
     public Seller saveSeller(Seller s) throws SellerDataException {
-        if(s.getName().isEmpty()){ throw new SellerDataException("Seller name cannot be blank");}
-        Main.log.info("Seller saved: "+ s);
-        return sellerRepository.save(s);
+        if(s.getName().isEmpty()){
+            Main.log.warn("Seller name empty: "+ s);
+            throw new SellerDataException("Seller name cannot be blank");}
+        Seller savedSeller = sellerRepository.save(s);
+        Main.log.info("Seller saved: "+ savedSeller);
+        return savedSeller;
     }
 }

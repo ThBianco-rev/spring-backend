@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode
-@ToString
+
 public class Product {
 
     @Id
@@ -20,7 +20,18 @@ public class Product {
     private double price;
 
     @ManyToOne
-    @JsonIgnore
     @JsonIgnoreProperties("products")
     private Seller seller;
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", sellerId=" + (seller!= null ? seller.getId() : null)  +
+                ", sellerName=" + (seller!= null ? seller.getName() : null) +
+                '}';
+    }
 }
+
