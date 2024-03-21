@@ -1,7 +1,9 @@
 package org.example.controller;
 
 import org.example.entity.Product;
+import org.example.exception.ProductDataException;
 import org.example.exception.ProductNotFoundException;
+import org.example.exception.SellerNotFoundException;
 import org.example.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,69 +13,87 @@ import java.util.List;
 
 @RestController
 public class ProductController {
-        ProductService productService;
-        public ProductController(ProductService productService) {
-            this.productService = productService;
-        }
+    ProductService productService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
     @GetMapping(value="/product", params = "name")
-    public ResponseEntity<List<Product>> getProductByName(@RequestParam String name){
+    public ResponseEntity<?> getProductByName(@RequestParam String name){
         List<Product> product;
         if (name == null) {
-            product = productService.getAllProducts();
+            try{
+                product = productService.getAllProducts();
+                return new ResponseEntity<>(product, HttpStatus.OK);
+            }catch(ProductNotFoundException e){
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            }
         }else{
-            product = productService.getProductByName(name);
+            try{
+                product = productService.getProductByName(name);
+            }catch(ProductNotFoundException e){
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            }
         }
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @GetMapping(value = "product")
-    public ResponseEntity<List<Product>> getAllProducts(){
-        List<Product> product;
-        product = productService.getAllProducts();
-        return new ResponseEntity<>(product, HttpStatus.OK);
+    public ResponseEntity<?> getAllProducts(){
+        try{
+            List<Product> product;
+            product = productService.getAllProducts();
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        }catch(ProductNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("product/{id}")
-    public ResponseEntity<Product> getById(@PathVariable long id){
+    public ResponseEntity<?> getById(@PathVariable long id){
         try{
             Product p = productService.getById(id);
             return new ResponseEntity<>(p, HttpStatus.OK);
         }catch (ProductNotFoundException e){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            //TODO: Add logging
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping("/seller/{id}/product")
-    public ResponseEntity<Product> addProduct(@RequestBody Product p, @PathVariable long id) {
+    public ResponseEntity<?> addProduct(@RequestBody Product p, @PathVariable long id) {
         try{
             Product product = productService.saveProduct(id, p);
             return new ResponseEntity<>(product, HttpStatus.CREATED);
-        }catch (Exception e){
+        }catch (SellerNotFoundException | ProductDataException e){
+            //TODO: Replace with logging
             System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        return null;
     }
 
     @PutMapping("product/{id}")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product p, @PathVariable long id){
+    public ResponseEntity<?> updateProduct(@RequestBody Product p, @PathVariable long id){
         try{
             Product product = productService.updateProduct(id, p);
             return new ResponseEntity<>(product, HttpStatus.OK);
         }catch (Exception e){
+            //TODO: Replace with logging
             System.out.println(e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("product/{id}")
-    public ResponseEntity<Product> deleteProduct(@PathVariable long id) {
+    public ResponseEntity<?> deleteProduct(@PathVariable long id) {
         try {
             Product product = productService.deleteProduct(id);
             return new ResponseEntity<>(product, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (ProductNotFoundException e) {
+            //TODO: Replace with logging
             System.out.println(e);
             // Even if product is not found, return 200 status - this is convention
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
         }
     }
 }
